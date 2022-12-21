@@ -1,4 +1,13 @@
+import java.sql.Struct;
 import java.util.Enumeration;
+
+class Location {
+    public double lat, lng;
+    Location(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+};
 
 public class platoon {
 
@@ -10,7 +19,11 @@ public class platoon {
  */
     private double distance;
     private int speed,signal_strength;
-    private String location,weather;
+    private String weather;
+    private Location location;
+
+
+    
 
 
     public double getDistance() {
@@ -37,10 +50,10 @@ public class platoon {
     }
 
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -59,11 +72,11 @@ public class platoon {
         this.distance=0.0;
         this.speed=0;
         this.signal_strength=0;
-        this.location="";
+        this.location=new Location(0, 0);
         this.weather="";
     }
 
-    public platoon(double _distance,int _speed,int _signal_strength,String _location,String _weather)
+    public platoon(double _distance,int _speed,int _signal_strength,Location _location,String _weather)
     {
         this.distance=_distance;
         this.speed=_speed;
