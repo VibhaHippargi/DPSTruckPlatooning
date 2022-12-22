@@ -1,7 +1,4 @@
 import java.io.Serializable;
-import java.sql.Struct;
-import java.util.Enumeration;
-import java.io.Serializable;
 
 class Location implements Serializable {
     public double lat, lng;

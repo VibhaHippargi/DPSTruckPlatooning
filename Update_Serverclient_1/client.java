@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 
@@ -107,9 +106,6 @@ public class client {
 
 
     BufferedReader toreadserverresponse=new BufferedReader(new InputStreamReader((socket.getInputStream())));
-
-    BufferedReader keyboard= new BufferedReader(new InputStreamReader(System.in));
-    PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
 
 
     // while(true)
