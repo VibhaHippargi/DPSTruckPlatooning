@@ -1,7 +1,9 @@
+import java.io.Serializable;
 import java.sql.Struct;
 import java.util.Enumeration;
+import java.io.Serializable;
 
-class Location {
+class Location implements Serializable {
     public double lat, lng;
     Location(double lat, double lng) {
         this.lat = lat;
@@ -9,7 +11,7 @@ class Location {
     }
 };
 
-public class platoon {
+public class platoon implements Serializable {
 
     /*1.distance -double
  * 2.speed -int

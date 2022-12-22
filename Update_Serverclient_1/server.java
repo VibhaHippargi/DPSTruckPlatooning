@@ -1,5 +1,3 @@
-package Threading.Code;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -9,6 +7,8 @@ import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.lang.Thread;
 import java.lang.String;
@@ -35,107 +35,123 @@ class ServerThread extends Thread {
        
         
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            // BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
             int prev;
            // int prev_dis_value=disconnected_client;
 
-            while(true) {
-                String outputString = input.readLine();
-                String sent="";
+            // while(true) {
+            //     String outputString = input.readLine();
+            //     String sent="";
                 
-                System.out.println("Client["+ count +"] says : " + outputString);
+            //     System.out.println("Client["+ count +"] says : " + outputString);
                 
-                 if(outputString==null)
-                 {
+            //      if(outputString==null)
+            //      {
                    
-                    System.out.println("[SERVER] Disconnecting Client["+ count +"]");
-                    disconnected_client+=1;
-                    flag=true;
-                    System.out.println("[SERVER] current disconnected client count: "+disconnected_client);
+            //         System.out.println("[SERVER] Disconnecting Client["+ count +"]");
+            //         disconnected_client+=1;
+            //         flag=true;
+            //         System.out.println("[SERVER] current disconnected client count: "+disconnected_client);
                 
               
-                   System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                   break;
-                 }
+            //        System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //        break;
+            //      }
                 
              
 
 
-                switch (outputString)
-                {
+            //     switch (outputString)
+            //     {
                         
-                    case "object":
-                     sent=Objectdetected();
-                     output.println(sent);
+            //         case "object":
+            //          sent=Objectdetected();
+            //          output.println(sent);
                     
-                     System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
-                     System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                        break;
+            //          System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
+            //          System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //             break;
 
-                        case "food":
-                     sent=getRandomFood();
-                     output.println(sent);
+            //             case "food":
+            //          sent=getRandomFood();
+            //          output.println(sent);
                     
-                     System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
-                     System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                        break;
+            //          System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
+            //          System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //             break;
 
-                        case "low":
-                        sent=signalStrength();
-                        output.println(sent);
+            //             case "low":
+            //             sent=signalStrength();
+            //             output.println(sent);
                        
-                        System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
-                        System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                           break;
+            //             System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
+            //             System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //                break;
 
-                   default:
-                   String when_not_food= "Say food";
-                    output.println(when_not_food);
-                    System.out.println("[SERVER] sent data to Client["+ count + "] "+when_not_food);
-                    System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                    //output.println("");
-                        break;
-                }
+            //        default:
+            //        String when_not_food= "Say food";
+            //         output.println(when_not_food);
+            //         System.out.println("[SERVER] sent data to Client["+ count + "] "+when_not_food);
+            //         System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //         //output.println("");
+            //             break;
+            //     }
                
 
 
 
-                /*if(outputString==null)
-                 {
-                   break;
-                 }
+            //     /*if(outputString==null)
+            //      {
+            //        break;
+            //      }
 
-                 else if(outputString.contains("object"))
-                 {
-                    String sent=Objectdetected();
-                    output.println(sent);
-                  //System.out.println("[SERVER] Server received from client :"+outputString);
-                  System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
-                  System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                 }
+            //      else if(outputString.contains("object"))
+            //      {
+            //         String sent=Objectdetected();
+            //         output.println(sent);
+            //       //System.out.println("[SERVER] Server received from client :"+outputString);
+            //       System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
+            //       System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //      }
 
 
-                else if(outputString.contains("food"))
-                {
-                    //output.println("Hello");
-                    String sent=getRandomFood();
-                   output.println(sent);
-                  //System.out.println("[SERVER] Server received from client :"+outputString);
-                  System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
-                  System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //     else if(outputString.contains("food"))
+            //     {
+            //         //output.println("Hello");
+            //         String sent=getRandomFood();
+            //        output.println(sent);
+            //       //System.out.println("[SERVER] Server received from client :"+outputString);
+            //       System.out.println("[SERVER] sent data to Client["+ count + "] "+sent);
+            //       System.out.println("----------------------------------"+'\n'+"----------------------------------");
 
-                }
-                else {
-                  //  System.out.println("[SERVER] Server received from client "+outputString);
-                    String when_not_food= "Say food";
-                    output.println(when_not_food);
-                    System.out.println("[SERVER] sent data to Client:"+when_not_food);
-                    System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                    //output.println("");
-                }*/
+            //     }
+            //     else {
+            //       //  System.out.println("[SERVER] Server received from client "+outputString);
+            //         String when_not_food= "Say food";
+            //         output.println(when_not_food);
+            //         System.out.println("[SERVER] sent data to Client:"+when_not_food);
+            //         System.out.println("----------------------------------"+'\n'+"----------------------------------");
+            //         //output.println("");
+            //     }*/
+            // }
+            // prev=disconnected_client;
+            
+            // platoon clientPlatoon = clientInput.readObject();
+            platoon clientPlatoon;
+            
+            try {
+                clientPlatoon = (platoon) clientInput.readObject();
+                System.out.println("Distance is " + clientPlatoon.getDistance());
+                System.out.println("dist" + clientPlatoon.getDistance() +" signal: " + clientPlatoon.getSignal_strength() + " speed " +clientPlatoon.getSpeed()+" location "+ clientPlatoon.getLocation().lat + " " + clientPlatoon.getLocation().lng + " weather " + clientPlatoon.getWeather());
+
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            prev=disconnected_client;
+            // System.out.println(clientInput.);
         } 
        
         catch (IOException e)

@@ -138,6 +138,11 @@ public class client {
 
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
+    System.out.println("dist" + p.getDistance() +" signal: " + p.getSignal_strength() + " speed " +p.getSpeed()+" location "+ p.getLocation().lat + " " + p.getLocation().lng + " weather " + p.getWeather());
+    
+
+
+
     objectOutputStream.writeObject(p);
     
         
