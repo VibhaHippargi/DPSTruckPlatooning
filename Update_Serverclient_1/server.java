@@ -1,6 +1,6 @@
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -34,44 +34,59 @@ class ServerThread extends Thread {
             ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+            monitorPlatoonData check =new monitorPlatoonData();
            
             platoon clientPlatoon;
             
             try {
                 clientPlatoon = (platoon) clientInput.readObject();
-                System.out.println("Client["+ count +"] has sent : ");
-                //System.out.println("Distance is " + clientPlatoon.getDistance());
 
-                System.out.println("Distance: " + clientPlatoon.getDistance()+'\n'
-                 +"Signal Strength: " + clientPlatoon.getSignal_strength() +'\n'
-                 + "Speed: " +clientPlatoon.getSpeed()+'\n'
-                 +"Location: "+ clientPlatoon.getLocation().lat
-                 +" " + clientPlatoon.getLocation().lng +'\n'
-                 +"Weather: " + clientPlatoon.getWeather());
+                if(clientPlatoon.getQuit())
+                {
+                    System.out.println("Client["+ count +"] has requested to quit" +'\n'+
+                    "Disconnecting Client["+ count +"]");
+                    output.println( "Disconnecting Client["+ count +"]");  //send data to client
+                }
+                else
+                { 
+                    System.out.println("Client["+ count +"] has sent : ");
+                    System.out.println("Distance: " + clientPlatoon.getDistance()+'\n'
+                     +"Signal Strength: " + clientPlatoon.getSignal_strength() +'\n'
+                     + "Speed: " +clientPlatoon.getSpeed()+'\n'
+                     +"Location: "+ clientPlatoon.getLocation().lat
+                     +" " + clientPlatoon.getLocation().lng +'\n'
+                     +"Weather: " + clientPlatoon.getWeather() +'\n'
+                     + "Quit: "+clientPlatoon.getQuit());
+
+                     //call monitor methods
+                     ArrayList<String> result_List= new ArrayList<>();
+                     result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
+                     result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
+                     result_List.add(check.monitor_speed(clientPlatoon.getSignal_strength()));
+                    
+                      output.println("[SERVER] sent data to Client["+ count + "] "+
+                        result_List);
+                        System.out.println(result_List); 
+ 
+                }
+               
 
                   System.out.println("------------------------------- ");
 
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
+                
                 e.printStackTrace();
             }
-            // System.out.println(clientInput.);
+            
         } 
        
         catch (IOException e)
          {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         };
          } 
         }
-
-       // finally{
-    
-           
-
-   // }
-   
  
 }
 

@@ -10,21 +10,19 @@ class Location implements Serializable {
 
 public class platoon implements Serializable {
 
-    /*1.distance -double
- * 2.speed -int
- * 3.signal strength -int
- * 4.location -string
- * 5.weather/road condition - string
- */
     private double distance;
     private int speed,signal_strength;
     private String weather;
     private Location location;
+    private boolean quit;
 
 
-    
-
-
+    public boolean getQuit() {
+        return quit;
+    }
+    public void setQuit(boolean quit) {
+        this.quit = quit;
+    }
     public double getDistance() {
         return distance;
     }
@@ -64,8 +62,6 @@ public class platoon implements Serializable {
         this.weather = weather;
     }
 
-    
-
     public platoon()
     {
         this.distance=0.0;
@@ -73,15 +69,17 @@ public class platoon implements Serializable {
         this.signal_strength=0;
         this.location=new Location(0, 0);
         this.weather="";
+        this.quit=false;
     }
 
-    public platoon(double _distance,int _speed,int _signal_strength,Location _location,String _weather)
+    public platoon(double _distance,int _speed,int _signal_strength,Location _location,String _weather,boolean _quit)
     {
         this.distance=_distance;
         this.speed=_speed;
         this.signal_strength=_signal_strength;
         this.location=_location;
         this.weather=_weather;
+        this.quit=_quit;
     }
 
 }

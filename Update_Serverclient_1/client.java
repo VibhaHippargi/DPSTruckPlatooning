@@ -99,59 +99,77 @@ public class client
     public static void main(String[] args)throws IOException{
 
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
-       // System.console();
         Socket socket=new Socket(SERVER_IP,SERVER_PORT);
         System.out.println("[CLIENT] Connected to server on port: "+SERVER_PORT +" ip: "+SERVER_IP);
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
 
-        client obj = new client();
+        client clientobj = new client();
 
         BufferedReader keyboard= new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
+        
         BufferedReader toreadserverresponse=new BufferedReader(new InputStreamReader((socket.getInputStream())));
 
 
      while(true)
      {
-         System.out.println("**>Hit Enter to send data to Server**");
+         System.out.println(">Hit Enter to send data to Server or 'Q' to quit---");
          String command=keyboard.readLine();
-        
-         if(command.equals("quit"))
-         {   
-            break;
+         platoon p=new platoon();
+         ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+      
+         if(command.equalsIgnoreCase("Q"))
+         {
+            p.setQuit(true);
+            
          }
-        
-        double dist = obj.getRandomDist();
-        int signal = obj.getRandomSignal();
-        int speed = obj.getRandomSpeed();
-        Location location = obj.getRandomLocation();
-        String weather = obj.getRandomWeather();
+       
+           
+         else
+         {
+           double dist = clientobj.getRandomDist();
+           int signal = clientobj.getRandomSignal();
+           int speed = clientobj.getRandomSpeed();
+           Location location = clientobj.getRandomLocation();
+           String weather = clientobj.getRandomWeather();
 
-        platoon p=new platoon(dist,speed,signal,location,weather);
-    //    out.println(command);
+            p.setDistance(dist);
+            p.setSpeed(speed);
+            p.setSignal_strength(signal);
+            p.setLocation(location);
+            p.setWeather(weather);
+            p.setQuit(false);
+        }
 
-    ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
-    //System.out.println("dist" + p.getDistance() +" signal: " + p.getSignal_strength() + " speed " +p.getSpeed()+" location "+ p.getLocation().lat + " " + p.getLocation().lng + " weather " + p.getWeather());
-    
+   
+
     System.out.println("Sending details to Server....");
-    System.out.println("Distance: " + p.getDistance()+'\n'
-    +"Signal Strength: " + p.getSignal_strength() +'\n'
-    + "Speed: " +p.getSpeed()+'\n'
-    +"Location: "+ p.getLocation().lat +" " + p.getLocation().lng +'\n'
-    +"Weather: " + p.getWeather());
+    
+    if(p.getQuit())
+    System.out.println("Quit: "+ p.getQuit());
+    else
+    {
+        System.out.println("Distance: " + p.getDistance()+'\n'
+        +"Signal Strength: " + p.getSignal_strength() +'\n'
+        + "Speed: " +p.getSpeed()+'\n'
+        +"Location: "+ p.getLocation().lat +" " + p.getLocation().lng +'\n'
+        +"Weather: " + p.getWeather()+'\n'+"Quit: "+ p.getQuit());
+    }
+   
     System.out.println("------------------------------- ");
-    objectOutputStream.writeObject(p);
-
-        
-   }
-
+    objectOutputStream.writeObject(p);                            //sending data to server
+    System.out.println("------------------------------- ");
+    System.out.println("Waiting for Server response... ");
     String serverresponse=toreadserverresponse.readLine();
-    //JOptionPane.showMessageDialog(null,serverresponse);
-    System.out.println("[CLIENT] Server sent: "+serverresponse);
+    System.out.println("[CLIENT] Server sent: "+'\n'+serverresponse);
 
     System.out.println("----------------------------------"+'\n'+"----------------------------------");
-    
+       if(p.getQuit())
+       {
+        break;
+       }
+      
+ }
     socket.close();
     System.exit(0);
         }
