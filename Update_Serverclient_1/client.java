@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
 
@@ -16,7 +17,8 @@ import java.util.Random;
  * 5.weather/road condition - string
  */
 
-public class client {
+public class client
+{
 
     private static final String SERVER_IP="127.0.0.1";
     private static final int SERVER_PORT  =9090;
@@ -24,11 +26,11 @@ public class client {
     private Random random;
 
 
-    client() {
+    client()
+     {
         random = new Random();
-    }
-
-
+     }
+     
     public double getRandomDist() 
     {
         /**
@@ -104,15 +106,20 @@ public class client {
 
         client obj = new client();
 
+        BufferedReader keyboard= new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out=new PrintWriter(socket.getOutputStream(),true);
+        BufferedReader toreadserverresponse=new BufferedReader(new InputStreamReader((socket.getInputStream())));
 
-    BufferedReader toreadserverresponse=new BufferedReader(new InputStreamReader((socket.getInputStream())));
 
-
-    // while(true)
-    // {
-        // System.out.println("> ");
-        // String command=keyboard.readLine();
+     while(true)
+     {
+         System.out.println("**>Hit Enter to send data to Server**");
+         String command=keyboard.readLine();
         
+         if(command.equals("quit"))
+         {   
+            break;
+         }
         
         double dist = obj.getRandomDist();
         int signal = obj.getRandomSignal();
@@ -120,37 +127,34 @@ public class client {
         Location location = obj.getRandomLocation();
         String weather = obj.getRandomWeather();
 
-
-
-        System.out.println("dist" + dist +" signal: " + signal + " speed " +speed+" location "+ location.lat + " " + location.lng + " weather " + weather);
-    
-        // if(command.equals("quit"))
-        // {   //out.println(command);
-        //     break;
-        // }
-
         platoon p=new platoon(dist,speed,signal,location,weather);
     //    out.println(command);
 
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
-    System.out.println("dist" + p.getDistance() +" signal: " + p.getSignal_strength() + " speed " +p.getSpeed()+" location "+ p.getLocation().lat + " " + p.getLocation().lng + " weather " + p.getWeather());
+    //System.out.println("dist" + p.getDistance() +" signal: " + p.getSignal_strength() + " speed " +p.getSpeed()+" location "+ p.getLocation().lat + " " + p.getLocation().lng + " weather " + p.getWeather());
     
-
-
-
+    System.out.println("Sending details to Server....");
+    System.out.println("Distance: " + p.getDistance()+'\n'
+    +"Signal Strength: " + p.getSignal_strength() +'\n'
+    + "Speed: " +p.getSpeed()+'\n'
+    +"Location: "+ p.getLocation().lat +" " + p.getLocation().lng +'\n'
+    +"Weather: " + p.getWeather());
+    System.out.println("------------------------------- ");
     objectOutputStream.writeObject(p);
-    
+
         
+   }
+
     String serverresponse=toreadserverresponse.readLine();
     //JOptionPane.showMessageDialog(null,serverresponse);
     System.out.println("[CLIENT] Server sent: "+serverresponse);
 
     System.out.println("----------------------------------"+'\n'+"----------------------------------");
-    // }
+    
     socket.close();
     System.exit(0);
-
-    }
-
+        }
+    
+    
 }
