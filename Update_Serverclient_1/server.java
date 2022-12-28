@@ -44,8 +44,8 @@ class ServerThread extends Thread {
                 if(clientPlatoon.getQuit())
                 {
                     System.out.println("Client["+ count +"] has requested to quit" +'\n'+
-                    "Disconnecting Client["+ count +"]");
-                    output.println( "Disconnecting Client["+ count +"]");  //send data to client
+                            Messages.DISCONNECT.getMessage()+"["+ count +"]");
+                    output.println(Messages.DISCONNECT.getMessage()+"["+ count +"]");  //send data to client
                 }
                 else
                 { 
@@ -155,7 +155,7 @@ public class server {
     public static void main(String[] args) throws IOException {
         
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
-        System.out.println("Server Started");
+        System.out.println(Messages.START.getMessage());
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
         ServerHelper _serverHelper = new ServerHelper();
         _serverHelper.run();
