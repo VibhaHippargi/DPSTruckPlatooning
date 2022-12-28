@@ -8,9 +8,8 @@ import java.io.PrintWriter;
 import java.lang.Thread;
 import java.lang.String;
 
-
 class ServerThread extends Thread {
-    
+
     private Socket socket;
     private int count;
     private int disconnected_client;
@@ -18,80 +17,92 @@ class ServerThread extends Thread {
 
     public ServerThread(Socket socket, int count) {
         this.socket = socket;
-        this.count = count+1;
-        
+        this.count = count + 1;
+
     }
 
     @Override
     public void run() {
-       
-        while(true)
-        {
 
-        
-        try {
-            // BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
-            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
-            monitorPlatoonData check =new monitorPlatoonData();
-           
-            platoon clientPlatoon;
-            
+        while (true) {
+
             try {
-                clientPlatoon = (platoon) clientInput.readObject();
+                // BufferedReader input = new BufferedReader(new
+                // InputStreamReader(socket.getInputStream()));
+                ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
+                PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+                monitorPlatoonData check = new monitorPlatoonData();
 
+<<<<<<< Updated upstream
                 if(clientPlatoon.getQuit())
                 {
                     System.out.println("Client["+ count +"] has requested to quit" +'\n'+
                             Messages.DISCONNECT.getMessage()+"["+ count +"]");
                     output.println(Messages.DISCONNECT.getMessage()+"["+ count +"]");  //send data to client
+=======
+                platoon clientPlatoon;
+
+                try {
+                    clientPlatoon = (platoon) clientInput.readObject();
+
+                    if (clientPlatoon.getQuit()) {
+                        System.out.println("Client[" + count + "] has requested to quit" + '\n' +
+                                "Disconnecting Client[" + count + "]");
+                        output.println("Disconnecting Client[" + count + "]"); // send data to client
+                    } else {
+                        System.out.println("Client[" + count + "] has sent : ");
+                        System.out.println("Distance: " + clientPlatoon.getDistance() + '\n'
+                                + "Signal Strength: " + clientPlatoon.getSignal_strength() + '\n'
+                                + "Speed: " + clientPlatoon.getSpeed() + '\n'
+                                + "Location: " + clientPlatoon.getLocation().lat
+                                + " " + clientPlatoon.getLocation().lng + '\n'
+                                + "Weather: " + clientPlatoon.getWeather() + '\n'
+                                + "Object Status " + clientPlatoon.getobject_detection() + "\n"
+                                + "Quit: " + clientPlatoon.getQuit());
+
+                        ArrayList<String> result_List = new ArrayList<>();
+                        // Object detection,change of command
+                        if (clientPlatoon.getobject_detection() == true) {
+                            String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(),
+                                    clientPlatoon.getSignal_strength());
+                            result_List.add(("Object Detected by given Platoon Slow DOWN!!!") + s);
+                        }
+                        // call monitor methods
+
+                        result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
+                        result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
+                        result_List.add(
+                                check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSignal_strength()));
+
+                        output.println("[SERVER] sent data to Client[" + count + "] " +
+                                result_List);
+                        System.out.println(result_List);
+
+                    }
+
+                    System.out.println("------------------------------- ");
+
+                } catch (ClassNotFoundException e) {
+
+                    e.printStackTrace();
+>>>>>>> Stashed changes
                 }
-                else
-                { 
-                    System.out.println("Client["+ count +"] has sent : ");
-                    System.out.println("Distance: " + clientPlatoon.getDistance()+'\n'
-                     +"Signal Strength: " + clientPlatoon.getSignal_strength() +'\n'
-                     + "Speed: " +clientPlatoon.getSpeed()+'\n'
-                     +"Location: "+ clientPlatoon.getLocation().lat
-                     +" " + clientPlatoon.getLocation().lng +'\n'
-                     +"Weather: " + clientPlatoon.getWeather() +'\n'
-                     + "Quit: "+clientPlatoon.getQuit());
 
-                     //call monitor methods
-                     ArrayList<String> result_List= new ArrayList<>();
-                     result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
-                     result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
-                     result_List.add(check.monitor_speed(clientPlatoon.getSignal_strength()));
-                    
-                      output.println("[SERVER] sent data to Client["+ count + "] "+
-                        result_List);
-                        System.out.println(result_List); 
- 
-                }
-               
+            }
 
-                  System.out.println("------------------------------- ");
+            catch (IOException e) {
 
-            } catch (ClassNotFoundException e) {
-                
                 e.printStackTrace();
             }
-            
-        } 
-       
-        catch (IOException e)
-         {
-            
-            e.printStackTrace();
-        };
-         } 
+            ;
         }
- 
+    }
+
 }
 
 class ServerHelper {
-    //private int disconnect_client;
+    // private int disconnect_client;
 
     private int disconnect_client;
     private boolean flag;
@@ -104,64 +115,63 @@ class ServerHelper {
             e.printStackTrace();
         }
     }
-    void run() {
-        while(true) {
 
-            try {
+    void run() {
+        try {
+            while (true) {
                 Socket socket = _server.accept();
-             
+
                 ServerThread serverThread = new ServerThread(socket, _clientCount);
-                _clientCount=_clientCount+1;
-                System.out.println("**********************************"+'\n'+"     New connection Alert"+'\n'+"**********************************");
-                System.out.println("Number of client connected: "+_clientCount );
-                System.out.println("[SERVER] Active threads:"+ ServerThread.activeCount());
-                System.out.println("----------------------------------"+'\n'+"----------------------------------");
-                //ServerThread serverThread = new ServerThread(socket, _clientCount);
+                _clientCount = _clientCount + 1;
+                System.out.println("**********************************" + '\n' + "     New connection Alert" + '\n'
+                        + "**********************************");
+                System.out.println("Number of client connected: " + _clientCount);
+                System.out.println("[SERVER] Active threads:" + ServerThread.activeCount());
+                System.out.println("----------------------------------" + '\n' + "----------------------------------");
+                // ServerThread serverThread = new ServerThread(socket, _clientCount);
                 // _threadList.add(serverThread);
                 serverThread.start();
 
-                if((disconnect_client==0) && (flag==true))
-                {
+                if ((disconnect_client == 0) && (flag == true)) {
                     socket.close();
                     _server.close();
                 }
-               
-
-                
-            } catch (IOException e)
-            
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
+        } catch (IOException e)
 
-            
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        
+
     }
 
     ServerSocket _server;
     int _clientCount;
-    //int disconnect_client;
+    // int disconnect_client;
     // private ArrayList<ServerThread> _threadList;
-   
+
     private static final int PORT = 9090;
 
-  
 }
 
 public class server {
 
     public static void main(String[] args) throws IOException {
+<<<<<<< Updated upstream
         
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
         System.out.println(Messages.START.getMessage());
         System.out.println("----------------------------------"+'\n'+"----------------------------------");
+=======
+
+        System.out.println("----------------------------------" + '\n' + "----------------------------------");
+        System.out.println("Server Started");
+        System.out.println("----------------------------------" + '\n' + "----------------------------------");
+>>>>>>> Stashed changes
         ServerHelper _serverHelper = new ServerHelper();
         _serverHelper.run();
-       
-      
+
     }
 
-   
 }

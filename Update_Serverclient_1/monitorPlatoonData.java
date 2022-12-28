@@ -1,63 +1,62 @@
 public class monitorPlatoonData {
 
-    leader lead = new leader();
-    private double std_distance=30.0;
-    private int std_speed = lead.getSpeed(); 
-    private int std_signal_strength = lead.getSignal_strength()-50;
-   
-    public String monitor_distance(double distance)
-    {  String s;
-       double r;
-       if(distance<std_distance)
-       {
-        r=std_distance-distance;
-        s= "You are close by "+r;
-       }
-       else
-       {
-        s= "Distance okay";
-       }
-       return s;  
-    }
+   Velocity_equations vel_equ = new Velocity_equations();
+   leader lead = new leader();
+   private double std_distance = 30.0;
+   private int std_speed = lead.getSpeed();
+   private int std_signal_strength = lead.getSignal_strength() - 50;
 
-    public String monitor_signal_strength(int signalstrength)
-    {  String s;
-       int r;
-       if(signalstrength<std_signal_strength)
-       {
-        r=std_signal_strength-signalstrength;
-        s= "You are "+r+" less than minimum required signal strength";
-       }
-       else
-       {
-        s= "Signal strength okay";
-       }
-       return s;
-      
-    }
+   public String monitor_distance(double distance) {
+      String s;
+      double r;
+      if (distance < std_distance) {
+         r = std_distance - distance;
+         s = "You are close by " + r;
+      } else // need to add one more condition to check if distance is too far
+      {
+         s = "Distance okay";
+      }
+      return s;
+   }
 
-    public String monitor_speed(int speed)
-    {  String s;
-       int r;
-       if(speed<std_speed)
-       {
-        r=std_speed-speed;
-        s= "You are "+r+" slower than leader";
-       }
-       else if(speed>std_distance)
-       {
-         r=std_speed-speed;
-        s= "You are "+r+" faster than leader.Slow down!";
-       }
-       else{
-         s= "Speed okay";
-       }
-       return s;
-      
-    }
+   public String monitor_signal_strength(int signalstrength) {
+      String s;
+      int r;
+      if (signalstrength < std_signal_strength) {
+         r = std_signal_strength - signalstrength;
+         s = "You are " + r + " less than minimum required signal strength";
+      } else // need to add one more condition to check if distance is in required lenght
+      {
+         s = "Signal strength okay";
+      }
+      return s;
 
-   
+   }
 
+   public String monitor_speed(double distance, int speed) {
+      String s;
+      int r;
+      String acceleration;
+      String time;
+      double differnce_distance = distance - std_distance;
 
+      differnce_distance = (differnce_distance < 0) ? -differnce_distance : differnce_distance;
+      if (speed < std_speed) {
+         acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
+         time = vel_equ.time_calculation(speed, std_speed);
+         r = std_speed - speed;
+         s = "You are " + r + " slower than leader, decelerate by " + acceleration + "for the given time" + time;
+      } else if (speed > std_speed) {
+         acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
+         time = vel_equ.time_calculation(speed, std_speed);
+         r = std_speed - speed;
+         s = "You are " + r + " faster than leader.Slow down! accelerate by" + acceleration + "for the given time"
+               + time;
+      } else {
+         s = "Speed okay";
+      }
+      return s;
+
+   }
 
 }
