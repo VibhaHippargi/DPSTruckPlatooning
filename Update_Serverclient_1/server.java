@@ -34,13 +34,6 @@ class ServerThread extends Thread {
                 PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
                 monitorPlatoonData check = new monitorPlatoonData();
 
-<<<<<<< Updated upstream
-                if(clientPlatoon.getQuit())
-                {
-                    System.out.println("Client["+ count +"] has requested to quit" +'\n'+
-                            Messages.DISCONNECT.getMessage()+"["+ count +"]");
-                    output.println(Messages.DISCONNECT.getMessage()+"["+ count +"]");  //send data to client
-=======
                 platoon clientPlatoon;
 
                 try {
@@ -65,7 +58,7 @@ class ServerThread extends Thread {
                         // Object detection,change of command
                         if (clientPlatoon.getobject_detection() == true) {
                             String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(),
-                                    clientPlatoon.getSignal_strength());
+                                    clientPlatoon.getSpeed());
                             result_List.add(("Object Detected by given Platoon Slow DOWN!!!") + s);
                         }
                         // call monitor methods
@@ -73,7 +66,7 @@ class ServerThread extends Thread {
                         result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
                         result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
                         result_List.add(
-                                check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSignal_strength()));
+                                check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSpeed()));
 
                         output.println("[SERVER] sent data to Client[" + count + "] " +
                                 result_List);
@@ -140,7 +133,7 @@ class ServerHelper {
         } catch (IOException e)
 
         {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
 
@@ -158,17 +151,11 @@ class ServerHelper {
 public class server {
 
     public static void main(String[] args) throws IOException {
-<<<<<<< Updated upstream
-        
-        System.out.println("----------------------------------"+'\n'+"----------------------------------");
-        System.out.println(Messages.START.getMessage());
-        System.out.println("----------------------------------"+'\n'+"----------------------------------");
-=======
 
         System.out.println("----------------------------------" + '\n' + "----------------------------------");
-        System.out.println("Server Started");
+        System.out.println(Messages.START.getMessage());
         System.out.println("----------------------------------" + '\n' + "----------------------------------");
->>>>>>> Stashed changes
+
         ServerHelper _serverHelper = new ServerHelper();
         _serverHelper.run();
 

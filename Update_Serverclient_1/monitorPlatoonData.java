@@ -34,12 +34,17 @@ public class monitorPlatoonData {
    }
 
    public String monitor_speed(double distance, int speed) {
+      // speed -> Current Speed of the Platoon
+      // distance -> Distance between the Platoon and the Vehicle in front of it
       String s;
       int r;
       String acceleration;
       String time;
       double differnce_distance = distance - std_distance;
-
+      // difference_distance -> the distance which needs to be maintained,
+      // i.e. if the platoon is at 40m distance from Vehicle before it and Standard
+      // distance is
+      // 30m then 10m needs to be covered
       differnce_distance = (differnce_distance < 0) ? -differnce_distance : differnce_distance;
       if (speed < std_speed) {
          acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
@@ -50,7 +55,7 @@ public class monitorPlatoonData {
          acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
          time = vel_equ.time_calculation(speed, std_speed);
          r = std_speed - speed;
-         s = "You are " + r + " faster than leader.Slow down! decelerate by" + acceleration + "for the given time "
+         s = "You are " + r + " faster than leader.Slow down! decelerate by" + acceleration + "for the given time"
                + time;
       } else {
          s = "Speed okay";
