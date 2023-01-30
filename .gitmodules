@@ -1,0 +1,3 @@
+[submodule "client-server-opencl"]
+	path = client-server-opencl
+	url = https://github.com/sachinkum0009/client-server-opencl.git
