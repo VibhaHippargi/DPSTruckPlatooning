@@ -11,7 +11,7 @@ DPS project for Masters ESE Winter22
 - [X] Client send data to server on `click+enter`
 
 - [ ] Clean closing of server
-- [ ] Separate the classes (sachin)
+- [ ] Separate the classes 
 - [ ] create enums for the server to client message (hamida)
 
 - [ ] Server will check the values (dist less than 10) (vibha)
@@ -19,6 +19,6 @@ DPS project for Masters ESE Winter22
 - [ ] Accelerate/Deccelerate Functions
 
 
-- [ ] Object Detection (cuda programming) (Supadma)
+- [X] Object Detection (cuda programming) (Sachin)
 
 - [ ] Count is not zero when all clients disconnected
