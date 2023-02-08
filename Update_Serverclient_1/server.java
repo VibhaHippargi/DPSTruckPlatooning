@@ -1,6 +1,7 @@
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -79,16 +80,25 @@ class ServerThread extends Thread {
                 } catch (ClassNotFoundException e) {
 
                     e.printStackTrace();
-
-                }
-
+            // Catch also all other exceptions.
+            } catch (Exception e) {
+              // Print what exception has been thrown.
+               System.out.println(e);
+             break;
+           }
+     }
+         // When the client disconnects then the server experiences EOF (End-Of-File).
+          catch (EOFException e){
+          System.out.println(e);
+          break;
+     }
+     //any other exceptions
+     catch (IOException e) {
+     // e.printStackTrace();
+    System.out.println(e);
+     break;
             }
-
-            catch (IOException e) {
-
-                e.printStackTrace();
-            }
-            ;
+            
         }
     }
 
