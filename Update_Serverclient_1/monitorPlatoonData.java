@@ -55,7 +55,7 @@ public class monitorPlatoonData {
          acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
          time = vel_equ.time_calculation(speed, std_speed);
          r = std_speed - speed;
-         s = "You are " + r + " faster than leader.Slow down! decelerate by" + acceleration + "for the given time"
+         s = "You are " + r + " faster than leader.Slow down! decelerate by " + acceleration + "for the given time "
                + time;
       } else {
          s = "Speed okay";

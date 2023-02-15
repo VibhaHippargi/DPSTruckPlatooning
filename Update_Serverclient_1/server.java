@@ -58,16 +58,14 @@ class ServerThread extends Thread {
                         ArrayList<String> result_List = new ArrayList<>();
                         // Object detection,change of command
                         if (clientPlatoon.getobject_detection() == true) {
-                            String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(),
-                                    clientPlatoon.getSpeed());
+                            String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(), clientPlatoon.getSpeed());
                             result_List.add(("Object Detected by given Platoon Slow DOWN!!!") + s);
                         }
                         // call monitor methods
 
                         result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
                         result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
-                        result_List.add(
-                                check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSpeed()));
+                        result_List.add(check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSpeed()));
 
                         output.println("[SERVER] sent data to Client[" + count + "] " +
                                 result_List);
