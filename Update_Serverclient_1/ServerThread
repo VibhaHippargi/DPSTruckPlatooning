@@ -1,0 +1,103 @@
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.lang.Thread;
+import java.lang.String;
+
+class ServerThread extends Thread {
+
+    private Socket socket;
+    private int count;
+    private int disconnected_client;
+    private boolean flag;
+
+    public ServerThread(Socket socket, int count) {
+        this.socket = socket;
+        this.count = count + 1;
+
+    }
+
+    @Override
+    public void run() {
+
+        while (true) {
+
+            try {
+                // BufferedReader input = new BufferedReader(new
+                // InputStreamReader(socket.getInputStream()));
+                ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
+                PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+                monitorPlatoonData check = new monitorPlatoonData();
+
+                platoon clientPlatoon;
+
+                try {
+                    clientPlatoon = (platoon) clientInput.readObject();
+
+                    if (clientPlatoon.getQuit()) {
+                        System.out.println("Client[" + count + "] has requested to quit" + '\n' +
+                                "Disconnecting Client[" + count + "]");
+                        output.println("Disconnecting Client[" + count + "]"); // send data to client
+                    } else {
+                        System.out.println("Client[" + count + "] has sent : ");
+                        System.out.println("Distance: " + clientPlatoon.getDistance() + '\n'
+                                + "Signal Strength: " + clientPlatoon.getSignal_strength() + '\n'
+                                + "Speed: " + clientPlatoon.getSpeed() + '\n'
+                                + "Location: " + clientPlatoon.getLocation().lat
+                                + " " + clientPlatoon.getLocation().lng + '\n'
+                                + "Weather: " + clientPlatoon.getWeather() + '\n'
+                                + "Object Status " + clientPlatoon.getobject_detection() + "\n"
+                                + "Quit: " + clientPlatoon.getQuit());
+
+                        ArrayList<String> result_List = new ArrayList<>();
+                        // Object detection,change of command
+                        if (clientPlatoon.getobject_detection() == true) {
+                            String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(), clientPlatoon.getSpeed());
+                            result_List.add(("Object Detected by given Platoon Slow DOWN!!!") + s);
+                        }
+                        // call monitor methods
+
+                        result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
+                        result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
+                        result_List.add(check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSpeed()));
+
+                        output.println("[SERVER] sent data to Client[" + count + "] " +
+                                result_List);
+                        System.out.println(result_List);
+
+                    }
+
+                    System.out.println("------------------------------- ");
+
+                } catch (ClassNotFoundException e) {
+
+                    e.printStackTrace();
+            // Catch also all other exceptions.
+            } catch (Exception e) {
+              // Print what exception has been thrown.
+               System.out.println(e);
+             break;
+           }
+     }
+         // When the client disconnects then the server experiences EOF (End-Of-File).
+          catch (EOFException e){
+          System.out.println(e);
+          break;
+     }
+     //any other exceptions
+     catch (IOException e) {
+     // e.printStackTrace();
+    System.out.println(e);
+     break;
+            }
+            
+        }
+    }
+
+}
