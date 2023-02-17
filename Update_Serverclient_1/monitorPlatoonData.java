@@ -53,24 +53,8 @@ public class monitorPlatoonData {
       // distance is
       // 30m then 10m needs to be covered
       differnce_distance = (differnce_distance < 0) ? -differnce_distance : differnce_distance;
-<<<<<<< Updated upstream
-      System.out.println("hjgsfdhgjfsdhgjgfsadhjfjhsadc\n");
-      System.out.println("Difference distance   :   " + differnce_distance);
       if (differnce_distance == 0) {
          s = "You are at safe distance, reduce speed to " + std_speed;
-=======
-      if (speed < std_speed) {
-         acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
-         time = vel_equ.time_calculation(speed, std_speed);
-         r = std_speed - speed;
-         s = "You are " + r + " slower than leader, accelerate by " + acceleration + "for the given time " + time;
-      } else if (speed > std_speed) {
-         acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
-         time = vel_equ.time_calculation(speed, std_speed);
-         r = std_speed - speed;
-         s = "You are " + r + " faster than leader.Slow down! decelerate by " + acceleration + "for the given time "
-               + time;
->>>>>>> Stashed changes
       } else {
          if (speed < std_speed) {
             acceleration = vel_equ.vel_calculation(speed, std_speed, differnce_distance);
