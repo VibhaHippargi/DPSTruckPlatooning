@@ -13,8 +13,6 @@ class ServerThread extends Thread {
 
     private Socket socket;
     private int count;
-    private int disconnected_client;
-    private boolean flag;
 
     public ServerThread(Socket socket, int count) {
         this.socket = socket;
@@ -28,75 +26,73 @@ class ServerThread extends Thread {
         while (true) {
 
             try {
-                // BufferedReader input = new BufferedReader(new
-                // InputStreamReader(socket.getInputStream()));
                 ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
-                ObjectOutputStream clientOuput = new ObjectOutputStream(socket.getOutputStream());
                 PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
                 monitorPlatoonData check = new monitorPlatoonData();
-
                 platoon clientPlatoon;
+                String object_detect = "Road Safe no object";
+                leader lead1 = new leader();
 
                 try {
+
+                    String weather_con = check.Weather_monitoring(lead1.getWeather());
+                    // output.println(weather_con);
+                    System.out.println("Server Status:  " +
+                            "Server Speed: " + lead1.getSpeed() + "\n" +
+                            "Server Location: " + lead1.getLocation() + "\n");
+
                     clientPlatoon = (platoon) clientInput.readObject();
+                    System.out.println("Client[" + count + "] has sent : ");
+                    System.out.println("Distance: " + clientPlatoon.getDistance() + '\n'
+                            + "Signal Strength: " + clientPlatoon.getSignal_strength() + '\n'
+                            + "Speed: " + clientPlatoon.getSpeed() + '\n'
+                            + "Location: " + clientPlatoon.getLocation().lat
+                            + " " + clientPlatoon.getLocation().lng + '\n'
+                            + "Object Status " + clientPlatoon.getobject_detection() + "\n"
+                            + "Quit: " + clientPlatoon.getQuit());
 
-                    if (clientPlatoon.getQuit()) {
-                        System.out.println("Client[" + count + "] has requested to quit" + '\n' +
-                                "Disconnecting Client[" + count + "]");
-                        output.println("Disconnecting Client[" + count + "]"); // send data to client
-                    } else {
-                        System.out.println("Client[" + count + "] has sent : ");
-                        System.out.println("Distance: " + clientPlatoon.getDistance() + '\n'
-                                + "Signal Strength: " + clientPlatoon.getSignal_strength() + '\n'
-                                + "Speed: " + clientPlatoon.getSpeed() + '\n'
-                                + "Location: " + clientPlatoon.getLocation().lat
-                                + " " + clientPlatoon.getLocation().lng + '\n'
-                                + "Weather: " + clientPlatoon.getWeather() + '\n'
-                                + "Object Status " + clientPlatoon.getobject_detection() + "\n"
-                                + "Quit: " + clientPlatoon.getQuit());
-
-                        ArrayList<String> result_List = new ArrayList<>();
-                        // Object detection,change of command
-                        if (clientPlatoon.getobject_detection() == true) {
-                            String s = check.monitor_speed(clientPlatoon.getObject_detected_inmtrs(), clientPlatoon.getSpeed());
-                            result_List.add(("Object Detected by given Platoon Slow DOWN!!!") + s);
-                        }
-                        // call monitor methods
-
-                        result_List.add(check.monitor_distance(clientPlatoon.getDistance()));
-                        result_List.add(check.monitor_signal_strength(clientPlatoon.getSignal_strength()));
-                        result_List.add(check.monitor_speed(clientPlatoon.getDistance(), clientPlatoon.getSpeed()));
-
-                        output.println("[SERVER] sent data to Client[" + count + "] " +
-                                result_List);
-                        System.out.println(result_List);
-
+                    // Object detection,change of command
+                    if (clientPlatoon.getobject_detection() == true) {
+                        object_detect = check.Object_detection_status(clientPlatoon.getObject_detected_inmtrs(),
+                                clientPlatoon.getSpeed());
                     }
+                    // call monitor methods
+                    // String weather_con = check.Weather_monitoring(lead1.getWeather());
+                    String dist_result = check.monitor_distance(clientPlatoon.getDistance());
+                    String signal_status = check.monitor_signal_strength(clientPlatoon.getSignal_strength());
+                    String speed_status = check.monitor_speed(clientPlatoon.getDistance(),
+                            clientPlatoon.getSpeed());
+                    output.println("[SERVER] information to Client[" + count + "]   \t " + "Server Speed: "
+                            + lead1.getSpeed() + "\t" + weather_con);
+                    output.println("[SERVER] instructions to Client[" + count + "]   \t " + dist_result + "   \t"
+                            + signal_status + "   \t" + speed_status + "   \t" + object_detect);
+
+                    System.out.println("[SERVER] instructions to Client[" + count + "]\n " + dist_result + "\n"
+                            + signal_status + "\n" + speed_status + "\n" + weather_con + "\n" + object_detect);
 
                     System.out.println("------------------------------- ");
-
                 } catch (ClassNotFoundException e) {
 
                     e.printStackTrace();
-            // Catch also all other exceptions.
-            } catch (Exception e) {
-              // Print what exception has been thrown.
-               System.out.println(e);
-             break;
-           }
-     }
-         // When the client disconnects then the server experiences EOF (End-Of-File).
-          catch (EOFException e){
-          System.out.println(e);
-          break;
-     }
-     //any other exceptions
-     catch (IOException e) {
-     // e.printStackTrace();
-    System.out.println(e);
-     break;
+                    // Catch also all other exceptions.
+                } catch (Exception e) {
+                    // Print what exception has been thrown.
+                    System.out.println(e);
+                    break;
+                }
             }
-            
+            // When the client disconnects then the server experiences EOF (End-Of-File).
+            catch (EOFException e) {
+                System.out.println(e);
+                break;
+            }
+            // any other exceptions
+            catch (IOException e) {
+                // e.printStackTrace();
+                System.out.println(e);
+                break;
+            }
+
         }
     }
 

@@ -36,8 +36,7 @@ class ServerHelper {
                 System.out.println("Number of client connected: " + _clientCount);
                 System.out.println("[SERVER] Active threads:" + ServerThread.activeCount());
                 System.out.println("----------------------------------" + '\n' + "----------------------------------");
-                // ServerThread serverThread = new ServerThread(socket, _clientCount);
-                // _threadList.add(serverThread);
+
                 serverThread.start();
 
                 if ((disconnect_client == 0) && (flag == true)) {
@@ -45,10 +44,7 @@ class ServerHelper {
                     _server.close();
                 }
             }
-        } catch (IOException e)
-
-        {
-
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -56,9 +52,6 @@ class ServerHelper {
 
     ServerSocket _server;
     int _clientCount;
-    // int disconnect_client;
-    // private ArrayList<ServerThread> _threadList;
-
     private static final int PORT = 9090;
 
 }

@@ -1,19 +1,10 @@
 import java.io.Serializable;
 
-class Location implements Serializable {
-    public double lat, lng;
-
-    Location(double lat, double lng) {
-        this.lat = lat;
-        this.lng = lng;
-    }
-};
-
 public class platoon implements Serializable {
 
     private double distance;
     private int speed, signal_strength;
-    private String weather;
+    // private String weather;
     private Location location;
     private boolean quit;
     private int Object_detected_inmtrs;
@@ -75,20 +66,20 @@ public class platoon implements Serializable {
         this.location = location;
     }
 
-    public String getWeather() {
-        return weather;
-    }
+    // public String getWeather() {
+    // return weather;
+    // }
 
-    public void setWeather(String weather) {
-        this.weather = weather;
-    }
+    // public void setWeather(String weather) {
+    // this.weather = weather;
+    // }
 
     public platoon() {
         this.distance = 0.0;
         this.speed = 0;
         this.signal_strength = 0;
         this.location = new Location(0, 0);
-        this.weather = "";
+        // this.weather = "";
         this.Object_detected_inmtrs = 20;
         this.object_detection = false;
         this.quit = false;
@@ -101,7 +92,7 @@ public class platoon implements Serializable {
         this.speed = _speed;
         this.signal_strength = _signal_strength;
         this.location = _location;
-        this.weather = _weather;
+        // this.weather = _weather;
         this.Object_detected_inmtrs = object_detected_inmtrs;
         this.object_detection = object_detection;
         this.quit = _quit;

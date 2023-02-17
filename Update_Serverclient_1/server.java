@@ -16,7 +16,6 @@ public class server {
         System.out.println("----------------------------------" + '\n' + "----------------------------------");
         System.out.println(Messages.START.getMessage());
         System.out.println("----------------------------------" + '\n' + "----------------------------------");
-
         ServerHelper _serverHelper = new ServerHelper();
         _serverHelper.run();
 
