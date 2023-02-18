@@ -68,11 +68,17 @@ class ServerThread extends Thread {
                             + signal_status + "\n" + speed_status + "\n" + weather_con + "\n" + object_detect);
                     System.out.println("------------------------------- ");
 
+                    // if (ServerThread.activeCount() == 1) {
+                    // System.out.print(ServerThread.activeCount());
+                    // break;
+                    // }
                 } catch (ClassNotFoundException e) {
+                    System.out.println("Expe");
                     e.printStackTrace();
                     // Catch also all other exceptions.
                     break;
                 } catch (Exception e) {
+                    System.out.println("Expe1");
                     // Print what exception has been thrown.
                     System.out.println(e);
                     break;
