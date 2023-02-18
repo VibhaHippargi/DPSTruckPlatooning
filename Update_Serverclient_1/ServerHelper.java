@@ -4,9 +4,7 @@ import java.io.IOException;
 
 class ServerHelper {
     // private int disconnect_client;
-
-    private int disconnect_client;
-    private boolean flag;
+    Socket socket;
 
     public ServerHelper() {
         _clientCount = 0;
@@ -20,7 +18,7 @@ class ServerHelper {
     void run() {
         try {
             while (true) {
-                Socket socket = _server.accept();
+                socket = _server.accept();
 
                 ServerThread serverThread = new ServerThread(socket, _clientCount);
                 _clientCount = _clientCount + 1;
@@ -31,8 +29,7 @@ class ServerHelper {
                 System.out.println("----------------------------------" + '\n' + "----------------------------------");
 
                 serverThread.start();
-
-                if ((disconnect_client == 0) && (flag == true)) {
+                if (ServerThread.activeCount() == 0) {
                     socket.close();
                     _server.close();
                 }
